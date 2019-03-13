@@ -1,0 +1,1 @@
+{"version":3,"sources":["/home/ubo/eclipse-workspace/mep_client/src/index.css","main.546b4ca8.chunk.css"],"names":[],"mappings":"AAAA,mBACI,WAAA,CACA,uBCCJ","file":"main.546b4ca8.chunk.css","sourcesContent":["body, #app, #app>div {\n    height: 100%;\n    background-color: bisque;\n}","body, #app, #app>div {\n    height: 100%;\n    background-color: bisque;\n}\n\n\n\n"]}
