@@ -1,5 +1,6 @@
 package servlet;
 
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import base.Base;
 import bean.User;
+import http.Post;
+
+
 
 /**
  * Servlet implementation class ServletAuth
@@ -43,6 +48,20 @@ public class ServletAuth extends HttpServlet {
 		User u = new ObjectMapper().readValue(request.getReader(), User.class);
 		System.out.println(u.getLogin());
 		System.out.println(u.getMdp());
+		
+		Base bdd = new Base();
+		
+		String res = bdd.getUser(u);
+		response.getWriter().append(res);
+		
+		bdd.fermer();
+		
+		/*
+		 //envoie sur node exemple :
+		Post p = new Post();
+		String reponse;
+		reponse = p.send("http://localhost:4000/truc", "login="+u.getLogin()+"&mdp="+u.getMdp());
+		*/
+		
 	}
-
 }
