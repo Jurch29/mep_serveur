@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     order_id INT(10) NULL AUTO_INCREMENT,
     order_user_id INT(10) NOT NULL,
     order_trip_id INT(10) NOT NULL,
+    order_status INT(1) NOT NULL,
     order_date DATETIME NOT NULL,
 
     CONSTRAINT pk_orders

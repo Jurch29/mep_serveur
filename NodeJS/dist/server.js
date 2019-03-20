@@ -72,16 +72,16 @@ var Server = /** @class */ (function () {
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {
                         if (req.body.photos != 0) {
-                            var request_1 = 'INSERT INTO Photos VALUES ';
+                            var request_3 = 'INSERT INTO Photos VALUES ';
                             for (var i = 0; i < req.body.photos; i++) {
-                                request_1 += '(NULL, "' + req.body['photo' + i] + '")';
+                                request_3 += '(NULL, "' + req.body['photo' + i] + '")';
                                 if (i != (req.body.photos - 1)) {
-                                    request_1 += ', ';
+                                    request_3 += ', ';
                                 }
                             }
-                            request_1 += ';';
-                            console.log(request_1);
-                            mariadb_instance.execquery(request_1)
+                            request_3 += ';';
+                            console.log(request_3);
+                            mariadb_instance.execquery(request_3)
                                 .then(function (result_2) {
                                 console.log(result_1.insertId);
                                 var request = 'INSERT INTO Photos_Trips VALUES ';
@@ -133,16 +133,16 @@ var Server = /** @class */ (function () {
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {
                         if (req.body.photos != 0) {
-                            var request_2 = 'INSERT INTO Photos VALUES ';
+                            var request_4 = 'INSERT INTO Photos VALUES ';
                             for (var i = 0; i < req.body.photos; i++) {
-                                request_2 += '(NULL, "' + req.body['photo' + i] + '")';
+                                request_4 += '(NULL, "' + req.body['photo' + i] + '")';
                                 if (i != (req.body.photos - 1)) {
-                                    request_2 += ', ';
+                                    request_4 += ', ';
                                 }
                             }
-                            request_2 += ';';
-                            console.log(request_2);
-                            mariadb_instance.execquery(request_2)
+                            request_4 += ';';
+                            console.log(request_4);
+                            mariadb_instance.execquery(request_4)
                                 .then(function (result_2) {
                                 console.log(result_1.insertId);
                                 var request = 'INSERT INTO Photos_Comments VALUES ';
@@ -175,55 +175,6 @@ var Server = /** @class */ (function () {
                             res.write('');
                             res.send();
                         }
-                    })
-                        .catch(function (error) {
-                        console.log(error);
-                        res.write(error);
-                        res.send();
-                    });
-                    return [2 /*return*/];
-                });
-            });
-        });
-        app.post('/save_order', function (req, res) {
-            return __awaiter(this, void 0, void 0, function () {
-                var request;
-                return __generator(this, function (_a) {
-                    request = 'INSERT INTO Orders VALUES (NULL, ' + req.body.user_id + ', ' + req.body.trip_id + ', NOW());';
-                    console.log(request);
-                    mariadb_instance.execquery(request)
-                        .then(function (result_1) {
-                        var request = 'SELECT * FROM Trips WHERE Trips.trip_id = ' + req.body.trip_id;
-                        mariadb_instance.execquery(request)
-                            .then(function (result_2) {
-                            console.log(result_2[0].trip_name);
-                            var document = {
-                                user_id: parseInt(req.body.user_id),
-                                trip_id: parseInt(req.body.trip_id),
-                                trip_name: result_2[0].trip_name,
-                                trip_starting_date: result_2[0].trip_starting_date,
-                                trip_ending_date: result_2[0].trip_ending_date,
-                                trip_price: parseFloat(result_2[0].trip_price),
-                                trip_caption: result_2[0].trip_caption,
-                                order_date: new Date()
-                            };
-                            console.log(document);
-                            mongodb_instance.insert_order(document)
-                                .then(function (result_3) {
-                                res.write('');
-                                res.send();
-                            })
-                                .catch(function (error) {
-                                console.log(error);
-                                res.write(error);
-                                res.send();
-                            });
-                        })
-                            .catch(function (error) {
-                            console.log(error);
-                            res.write(error);
-                            res.send();
-                        });
                     })
                         .catch(function (error) {
                         console.log(error);
@@ -326,6 +277,97 @@ var Server = /** @class */ (function () {
                         .then(function (result_1) {
                         res.write(JSON.stringify(result_1));
                         res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
+        app.post('/user_id_from_email', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'SELECT Users.user_id FROM Users WHERE Users.user_mail = "' + req.body.user_mail + '";';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
+        app.post('/user_kart_orders_list', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'SELECT Orders.order_id, Trips.trip_id, Trips.trip_name, Trips.trip_starting_date, Trips.trip_ending_date, Trips.trip_price FROM Orders, Trips WHERE Orders.order_user_id = ' + req.body.user_id + ' AND Orders.order_trip_id = Trips.trip_id AND Orders.order_status = 0;';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
+        app.post('/pay_order', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request_1;
+                return __generator(this, function (_a) {
+                    request_1 = 'UPDATE Orders SET order_status = 1 WHERE order_id = ' + req.body.order_id + ';';
+                    console.log(request_1);
+                    mariadb_instance.execquery(request_1)
+                        .then(function (result_1) {
+                        var request_2 = 'SELECT * FROM Trips, Orders WHERE Orders.order_id = ' + req.body.order_id + ' AND Orders.order_trip_id = Trips.trip_id;';
+                        console.log(request_2);
+                        mariadb_instance.execquery(request_2)
+                            .then(function (result_2) {
+                            console.log(result_2[0].trip_name);
+                            var document = {
+                                user_id: result_2[0].order_user_id,
+                                trip_id: result_2[0].order_trip_id,
+                                trip_name: result_2[0].trip_name,
+                                trip_starting_date: result_2[0].trip_starting_date,
+                                trip_ending_date: result_2[0].trip_ending_date,
+                                trip_price: parseFloat(result_2[0].trip_price),
+                                trip_caption: result_2[0].trip_caption,
+                                order_date: result_2[0].order_date,
+                                order_payment_date: new Date()
+                            };
+                            console.log(document);
+                            mongodb_instance.insert_order(document)
+                                .then(function (result_3) {
+                                res.write('');
+                                res.send();
+                            })
+                                .catch(function (error) {
+                                console.log(error);
+                                res.write(error);
+                                res.send();
+                            });
+                        })
+                            .catch(function (error) {
+                            console.log(error);
+                            res.write(error);
+                            res.send();
+                        });
                     })
                         .catch(function (error) {
                         console.log(error);
