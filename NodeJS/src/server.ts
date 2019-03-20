@@ -176,6 +176,21 @@ export default class Server {
             });
         });
 
+        app.post('/user_comments_list', async function(req : any, res : any) {
+            let request = 'SELECT Comments.comment_id, Comments.comment_content, Comments.comment_date, Trips.trip_name FROM Comments, Trips WHERE Comments.comment_trip_id = Trips.trip_id AND Comments.comment_user_id = ' + req.body.user_id + ';';
+            console.log(request);
+			mariadb_instance.execquery(request)
+			.then(function(result_1) {
+				res.write(JSON.stringify(result_1));
+                res.send();
+			})
+			.catch(function(error) {
+                console.log(error);
+				res.write(error);
+                res.send();
+            });
+        });
+
         app.post('/trips_list', async function(req : any, res : any) {
             let request = 'SELECT * FROM Trips;';
             console.log(request);
@@ -208,6 +223,21 @@ export default class Server {
 
         app.post('/trip_photos_list', async function(req : any, res : any) {
             let request = 'SELECT Photos.photo_relative_name FROM Photos_Trips, Photos WHERE Photos_Trips.photo_trip_trip_id = ' + req.body.trip_id + ' AND Photos.photo_id = Photos_Trips.photo_trip_photo_id;';
+            console.log(request);
+			mariadb_instance.execquery(request)
+			.then(function(result_1) {
+				res.write(JSON.stringify(result_1));
+                res.send();
+			})
+			.catch(function(error) {
+                console.log(error);
+				res.write(error);
+                res.send();
+            });
+        });
+
+        app.post('/comment_photos_list', async function(req : any, res : any) {
+            let request = 'SELECT Photos.photo_relative_name FROM Photos_Comments, Photos WHERE Photos_Comments.photo_comment_comment_id = ' + req.body.comment_id + ' AND Photos.photo_id = Photos_Comments.photo_comment_photo_id;';
             console.log(request);
 			mariadb_instance.execquery(request)
 			.then(function(result_1) {

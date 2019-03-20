@@ -227,6 +227,26 @@ var Server = /** @class */ (function () {
                 });
             });
         });
+        app.post('/user_comments_list', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'SELECT Comments.comment_id, Comments.comment_content, Comments.comment_date, Trips.trip_name FROM Comments, Trips WHERE Comments.comment_trip_id = Trips.trip_id AND Comments.comment_user_id = ' + req.body.user_id + ';';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
         app.post('/trips_list', function (req, res) {
             return __awaiter(this, void 0, void 0, function () {
                 var request;
@@ -272,6 +292,26 @@ var Server = /** @class */ (function () {
                 var request;
                 return __generator(this, function (_a) {
                     request = 'SELECT Photos.photo_relative_name FROM Photos_Trips, Photos WHERE Photos_Trips.photo_trip_trip_id = ' + req.body.trip_id + ' AND Photos.photo_id = Photos_Trips.photo_trip_photo_id;';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
+        app.post('/comment_photos_list', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'SELECT Photos.photo_relative_name FROM Photos_Comments, Photos WHERE Photos_Comments.photo_comment_comment_id = ' + req.body.comment_id + ' AND Photos.photo_id = Photos_Comments.photo_comment_photo_id;';
                     console.log(request);
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {

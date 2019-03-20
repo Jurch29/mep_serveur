@@ -16,14 +16,14 @@ import http.Post;
 /**
  * Servlet implementation class MyServlet
  */
-@WebServlet("/MyServlet5")
-public class MyServlet5 extends HttpServlet {
+@WebServlet("/ServletUserComments")
+public class ServletUserComments extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public MyServlet5() {
+    public ServletUserComments() {
     	
     }
 
@@ -51,7 +51,7 @@ public class MyServlet5 extends HttpServlet {
 		System.out.println(user.toString());
 		
 		Post p = new Post();
-		response.getWriter().append(p.send("http://localhost:4000/user_orders_list", "user_id=" + user.toString()));
+		response.getWriter().append(p.send("http://localhost:4000/user_comments_list", "user_id=" + user.toString()));
 		
 		System.out.println("passPost2");
 	}
