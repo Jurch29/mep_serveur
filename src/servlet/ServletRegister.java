@@ -16,7 +16,7 @@ import bean.User_register;
 /**
  * Servlet implementation class ServletRegister
  */
-@WebServlet("/ServletSaveTrip")
+@WebServlet("/ServletRegister")
 public class ServletRegister extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
