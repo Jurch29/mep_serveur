@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,20 +41,25 @@ public class ServletCommentPhotos extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("passPost");
 		
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Content-type", "text/plain");
-		response.addHeader("cross-domain", "true");
+		HttpSession session = request.getSession();
 		
-		Integer comment = new ObjectMapper().readValue(request.getReader(), Integer.class);
-		
-		System.out.println(comment.toString());
-		
-		Post p = new Post();
-		response.getWriter().append(p.send("http://localhost:4000/comment_photos_list", "comment_id=" + comment.toString()));
-		
-		System.out.println("passPost2");
+		if (session.getAttribute("connected") != null && (boolean)session.getAttribute("connected") != false)
+		{
+			System.out.println("passPost");
+			
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.addHeader("Content-type", "text/plain");
+			response.addHeader("cross-domain", "true");
+			
+			Integer comment = new ObjectMapper().readValue(request.getReader(), Integer.class);
+			
+			System.out.println(comment.toString());
+			
+			Post p = new Post();
+			response.getWriter().append(p.send("http://localhost:4000/comment_photos_list", "comment_id=" + comment.toString()));
+			
+			System.out.println("passPost2");
+		}
 	}
-
 }

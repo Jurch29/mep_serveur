@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,20 +41,24 @@ public class ServletSelectTrip extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("passPost");
-		
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Content-type", "text/plain");
-		response.addHeader("cross-domain", "true");
-		
-		Integer trip = new ObjectMapper().readValue(request.getReader(), Integer.class);
-		
-		System.out.println(trip.toString());
-		
-		Post p = new Post();
-		response.getWriter().append(p.send("http://localhost:4000/select_trip", "trip_id=" + trip.toString()));
-		
-		System.out.println("passPost2");
+		HttpSession session = request.getSession();
+		if (session.getAttribute("connected") != null && (boolean)session.getAttribute("connected") != false)
+		{
+			System.out.println("passPost");
+			
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.addHeader("Content-type", "text/plain");
+			response.addHeader("cross-domain", "true");
+			
+			Integer trip = new ObjectMapper().readValue(request.getReader(), Integer.class);
+			
+			System.out.println(trip.toString());
+			
+			Post p = new Post();
+			response.getWriter().append(p.send("http://localhost:4000/select_trip", "trip_id=" + trip.toString()));
+			
+			System.out.println("passPost2");
+		}
 	}
 
 }
