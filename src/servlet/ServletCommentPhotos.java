@@ -41,25 +41,19 @@ public class ServletCommentPhotos extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("passPost");
 		
-		HttpSession session = request.getSession();
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Content-type", "text/plain");
+		response.addHeader("cross-domain", "true");
 		
-		if (session.getAttribute("connected") != null && (boolean)session.getAttribute("connected") != false)
-		{
-			System.out.println("passPost");
-			
-			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.addHeader("Content-type", "text/plain");
-			response.addHeader("cross-domain", "true");
-			
-			Integer comment = new ObjectMapper().readValue(request.getReader(), Integer.class);
-			
-			System.out.println(comment.toString());
-			
-			Post p = new Post();
-			response.getWriter().append(p.send("http://localhost:4000/comment_photos_list", "comment_id=" + comment.toString()));
-			
-			System.out.println("passPost2");
-		}
+		Integer comment = new ObjectMapper().readValue(request.getReader(), Integer.class);
+		
+		System.out.println(comment.toString());
+		
+		Post p = new Post();
+		response.getWriter().append(p.send("http://localhost:4000/comment_photos_list", "comment_id=" + comment.toString()));
+		
+		System.out.println("passPost2");
 	}
 }
