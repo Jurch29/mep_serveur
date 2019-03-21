@@ -207,11 +207,31 @@ var Server = /** @class */ (function () {
                 });
             });
         });
+        app.post('/save_order', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'INSERT INTO Orders VALUES (NULL, ' + req.body.user_id + ', ' + req.body.trip_id + ', 0, NOW());';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
         app.post('/trip_comments_list', function (req, res) {
             return __awaiter(this, void 0, void 0, function () {
                 var request;
                 return __generator(this, function (_a) {
-                    request = 'SELECT Comments.comment_content, Comments.comment_date, Users.user_name FROM Comments, Users WHERE Comments.comment_trip_id = ' + req.body.trip_id + ' AND Comments.comment_user_id = Users.user_id;';
+                    request = 'SELECT Comments.comment_id, Comments.comment_content, Comments.comment_date, Users.user_name FROM Comments, Users WHERE Comments.comment_trip_id = ' + req.body.trip_id + ' AND Comments.comment_user_id = Users.user_id ORDER BY Comments.comment_date;';
                     console.log(request);
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {
@@ -231,7 +251,7 @@ var Server = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 var request;
                 return __generator(this, function (_a) {
-                    request = 'SELECT Comments.comment_id, Comments.comment_content, Comments.comment_date, Trips.trip_name FROM Comments, Trips WHERE Comments.comment_trip_id = Trips.trip_id AND Comments.comment_user_id = ' + req.body.user_id + ';';
+                    request = 'SELECT Comments.comment_id, Comments.comment_content, Comments.comment_date, Trips.trip_name FROM Comments, Trips WHERE Comments.comment_trip_id = Trips.trip_id AND Comments.comment_user_id = ' + req.body.user_id + ' ORDER BY Comments.comment_date;';
                     console.log(request);
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {
@@ -347,11 +367,54 @@ var Server = /** @class */ (function () {
                 });
             });
         });
+        app.post('/verify_if_ordered', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var query;
+                return __generator(this, function (_a) {
+                    query = {
+                        user_id: parseInt(req.body.user_id),
+                        trip_id: parseInt(req.body.trip_id)
+                    };
+                    console.log(query);
+                    mongodb_instance.select_orders_from_user(query)
+                        .then(function (result) {
+                        res.write(JSON.stringify(result));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
         app.post('/user_kart_orders_list', function (req, res) {
             return __awaiter(this, void 0, void 0, function () {
                 var request;
                 return __generator(this, function (_a) {
                     request = 'SELECT Orders.order_id, Trips.trip_id, Trips.trip_name, Trips.trip_starting_date, Trips.trip_ending_date, Trips.trip_price FROM Orders, Trips WHERE Orders.order_user_id = ' + req.body.user_id + ' AND Orders.order_trip_id = Trips.trip_id AND Orders.order_status = 0;';
+                    console.log(request);
+                    mariadb_instance.execquery(request)
+                        .then(function (result_1) {
+                        res.write(JSON.stringify(result_1));
+                        res.send();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                        res.write(error);
+                        res.send();
+                    });
+                    return [2 /*return*/];
+                });
+            });
+        });
+        app.post('/user_kart_remove_order', function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var request;
+                return __generator(this, function (_a) {
+                    request = 'DELETE FROM Orders WHERE Orders.order_id = ' + req.body.order_id + ';';
                     console.log(request);
                     mariadb_instance.execquery(request)
                         .then(function (result_1) {

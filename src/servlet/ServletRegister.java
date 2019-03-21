@@ -16,7 +16,7 @@ import bean.User_register;
 /**
  * Servlet implementation class ServletRegister
  */
-@WebServlet("/ServletRegister")
+@WebServlet("/ServletSaveTrip")
 public class ServletRegister extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -45,7 +45,11 @@ public class ServletRegister extends HttpServlet {
 
 		Base bdd = new Base();
 		
-		if (bdd.verifyUser(u)) {
+		if (u.getMail() == "" || u.getMdp() == "" || u.getName() == "") {
+			response.getWriter().append("error");
+		}
+		
+		else if (bdd.verifyUser(u)) {
 			response.getWriter().append("exist");
 		}
 		else
